@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz for Tithi 💖</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #fff0f5;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      overflow-x: hidden;
+    }
+
+    h1, h2 {
+      color: #e91e63;
+    }
+
+    .container {
+      padding: 40px 20px;
+    }
+
+    .question {
+      font-size: 1.3em;
+      margin: 20px 0 10px;
+    }
+
+    .options button {
+      display: block;
+      margin: 10px auto;
+      padding: 10px 20px;
+      background: #f06292;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background 0.3s ease;
+    }
+
+    .options button:hover {
+      background: #ec407a;
+    }
+
+    #startBtn, #restartBtn {
+      background: #e91e63;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 25px;
+      color: white;
+      font-size: 1.2em;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    #finalMessage {
+      font-size: 1.5em;
+      color: #c2185b;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .hearts {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    .heart {
+      position: absolute;
+      color: #ff4081;
+      font-size: 24px;
+      animation: floatHearts 5s linear infinite;
+    }
+
+    @keyframes floatHearts {
+      0% {
+        transform: translateY(100vh) scale(0.5);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(-10vh) scale(1);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<audio autoplay loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
+</audio>
+
+<div class="container" id="startScreen">
+  <h1>Welcome, Tithi 😙💗</h1>
+  <p>It is Made with love by Shibam 💌</p>
+  <button id="startBtn" onclick="startQuiz()">Start the Love Quiz</button>
+</div>
+
+<div class="container" id="quizScreen" style="display: none;">
+  <div id="questionArea"></div>
+</div>
+
+<div class="container" id="resultScreen" style="display: none;">
+  <h2>Quiz Completed! 🎉</h2>
+  <p id="scoreText"></p>
+  <p id="finalMessage">Ami jantam tumi parbe sonai😊I love you so much babe 💖 — from you one and only Shibam😘</p>
+  <button id="restartBtn" onclick="location.reload()">Play Again</button>
+</div>
+
+<div class="hearts" id="heartContainer"></div>
+
+<script>
+const questions = [
+  {
+    q: "1. Where is the place Tithi and Shibam met first?",
+    options: ["Station", "Facebook", "Restaurant", "Durgapuja"],
+    answer: "Facebook"
+  },
+  {
+    q: "2. What does Shibam say to Tithi mostly?",
+    options: ["Miss you", "Love you", "Video call koro", "Nothing"],
+    answer: "Video call koro"
+  },
+  {
+    q: "3. What is Shibam's biggest fear?",
+    options: ["Darkness", "Ghost", "Losing Tithi", "Height"],
+    answer: "Losing Tithi"
+  },
+  {
+    q: "4. What is Shibam's greatest desire right now?",
+    options: ["To kiss Tithi", "To stay 1 night with Tithi", "To meet Tithi", "To hug Tithi"],
+    answer: "To meet Tithi"
+  },
+  {
+    q: "5. What does Shibam love doing when he's free?",
+    options: ["Dancing", "Singing", "Talk to Tithi", "Travelling"],
+    answer: "Talk to Tithi"
+  },
+  {
+    q: "6. What is Shibam's secret talent?",
+    options: ["Dancing", "Singing", "Cooking", "Nothing"],
+    answer: "Cooking"
+  },
+  {
+    q: "7. What is your couple goal?",
+    options: ["Make 20+ babies", "Supporting each other forever", "Drinking together", "None"],
+    answer: "Supporting each other forever"
+  },
+  {
+    q: "8. What does Shibam love most about Tithi?",
+    options: ["Her voice", "Her smile", "Her hair", "Her everything"],
+    answer: "Her everything"
+  },
+  {
+    q: "9. Who says 'I love you' mostly?",
+    options: ["Shibam", "Tithi", "Both", "No one"],
+    answer: "Shibam"
+  }
+];
+
+let current = 0;
+let score = 0;
+
+function startQuiz() {
+  document.getElementById("startScreen").style.display = "none";
+  document.getElementById("quizScreen").style.display = "block";
+  showQuestion();
+  generateHearts();
+}
+
+function showQuestion() {
+  const q = questions[current];
+  const html = `
+    <div class="question">${q.q}</div>
+    <div class="options">
+      ${q.options.map(opt => `<button onclick="checkAnswer('${opt}')">${opt}</button>`).join("")}
+    </div>
+  `;
+  document.getElementById("questionArea").innerHTML = html;
+}
+
+function checkAnswer(selected) {
+  if (selected === questions[current].answer) score++;
+  current++;
+  if (current < questions.length) {
+    showQuestion();
+  } else {
+    endQuiz();
+  }
+}
+
+function endQuiz() {
+  document.getElementById("quizScreen").style.display = "none";
+  document.getElementById("resultScreen").style.display = "block";
+  document.getElementById("scoreText").textContent = `You got ${score} out of ${questions.length} correct, Tithi! ❤️`;
+}
+
+function generateHearts() {
+  const heartContainer = document.getElementById("heartContainer");
+  setInterval(() => {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = Math.random() * 20 + 10 + "px";
+    heart.textContent = "💖";
+    heartContainer.appendChild(heart);
+    setTimeout(() => heart.remove(), 5000);
+  }, 300);
+}
+</script>
+</body>
+</html>
